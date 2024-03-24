@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dormitorySystem.dao.ExchangeInfoDao" >
+
+    <!--分页查询-->
+    <select id="getExchangeInfoList" parameterType="ExchangeInfo" resultType="ExchangeInfo">
+        select * from d_exchangeinfo
+        <where>
+            <if test="s_id!=null">
+                and  s_id = #{s_id}
+            </if>
+            <if test="s_name !=null and s_name !=''">
+                and  s_name like  '%${s_name}%'
+            </if>
+        </where>
+        ORDER BY  e_id asc
+        limit #{currentPage},#{pageSize}
+    </select>
+
+    <!--查询数据总数-->
+    <select id="totalCount"  resultType="Integer">
+        select count(e_id) from d_exchangeinfo
+        <where>
+            <if test="s_id!=null">
+                and  s_id = #{s_id}
+            </if>
+            <if test="s_name !=null and s_name !=''">
+                and  s_name like  '%${s_name}%'
+            </if>
+        </where>
+    </select>
+
+
+    <insert id="addExchangeInfo" parameterType="ExchangeInfo" keyProperty="e_id" useGeneratedKeys="true">
+        insert into d_exchangeinfo (s_id,s_name,d_dormbuilding,d_bed,e_dormbuilding,e_bed,e_name,e_remark,s_dormitoryid,e_dormitoryid)
+        values(#{s_id},#{s_name},#{d_dormbuilding},#{d_bed},#{e_dormbuilding},#{e_bed},#{e_name},#{e_remark},#{s_dormitoryid},#{e_dormitoryid})
+    </insert>
+
+    <!--通过id删除宿舍卫生信息-->
+    <delete id="deleteExchangeInfo" parameterType="Integer" >
+        delete from d_exchangeinfo where e_id=#{e_id}
+    </delete>
+
+    <select id="findExchangeInfoById"  parameterType="Integer" resultType="ExchangeInfo" >
+        select * from d_exchangeinfo where e_id=#{e_id}
+    </select>
+
+    <select id="getAll" resultType="ExchangeInfo">
+        select * from d_exchangeinfo;
+    </select>
+
+    <!--修改宿舍卫生信息-->
+    <update id="updateExchangeInfo" parameterType="ExchangeInfo">
+        update d_exchangeinfo
+        <set>
+            <if test="s_id!=null">
+                s_id=#{s_id},
+            </if>
+            <if test="s_name !=null and s_name !=''">
+                s_name=#{s_name},
+            </if>
+            <if test="e_name !=null and e_name !=''">
+                e_name=#{e_name},
+            </if>
+
+            <if test="d_dormbuilding !=null and d_dormbuilding !=''">
+                d_dormbuilding=#{d_dormbuilding},
+            </if>
+            <if test="d_bed !=null and d_bed !=''">
+                d_bed=#{d_bed},
+            </if>
+            <if test="e_dormbuilding !=null and e_dormbuilding !=''">
+                e_dormbuilding=#{e_dormbuilding},
+            </if>
+            <if test="e_bed !=null and e_bed !=''">
+                e_bed=#{e_bed},
+            </if>
+
+            <if test="e_remark !=null and e_remark !=''">
+                e_remark=#{e_remark},
+            </if>
+            <if test="e_status !=null">
+                e_status=#{e_status},
+            </if>
+            <if test="s_dormitoryid !=null">
+                s_dormitoryid=#{s_dormitoryid},
+            </if>
+            <if test="e_dormitoryid !=null">
+                e_dormitoryid=#{e_dormitoryid},
+            </if>
+
+        </set>
+        where e_id = #{e_id}
+    </update>
+
+    <!--宿舍卫生信息查询信息-->
+    <resultMap type="com.dormitorySystem.po.ExchangeInfo" id="cardAndInfo2">
+        <id property="e_id" column="e_id"/>
+        <result property="s_id" column="s_id" />
+        <result property="s_name" column="s_name" />
+        <result property="d_dormbuilding" column="d_dormbuilding" />
+        <result property="d_bed" column="d_bed" />
+        <result property="e_dormbuilding" column="e_dormbuilding" />
+        <result property="e_bed" column="e_bed" />
+        <result property="e_name" column="e_name" />
+        <result property="e_remark" column="e_remark" />
+        <result property="e_status" column="e_status" />
+        <result property="e_dormitoryid" column="e_dormitoryid" />
+        <result property="s_dormitoryid" column="s_dormitoryid" />
+    </resultMap>
+
+
+</mapper>
